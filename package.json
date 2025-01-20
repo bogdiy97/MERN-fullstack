@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "build": "cd client && npm install && npm run build && cd ../server && npm install",
+    "build": "cd client && NODE_ENV=production npm install && export SET NODE_OPTIONS=--openssl-legacy-provider && npm run build && cd ../server && npm install",
     "dev": "nodemon server/index.js"
   },
   "keywords": [],
