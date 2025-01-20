@@ -31,11 +31,11 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI;
 
-// Log the connection attempt
-console.log("Attempting to connect to MongoDB...");
-console.log("Using URI:", MONGODB_URI);
+// Ensure MongoDB URI is properly formatted
+const MONGODB_URI = 'mongodb+srv://root:root@cluster0.91fyb.mongodb.net/test?retryWrites=true&w=majority';
+
+console.log('Attempting to connect to MongoDB...');
 
 mongoose
   .connect(MONGODB_URI, {
@@ -43,11 +43,12 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Successfully connected to MongoDB");
+    console.log('Successfully connected to MongoDB');
     app.listen(PORT, () =>
       console.log(`Server Running on Port: http://localhost:${PORT}`)
     );
   })
   .catch((error) => {
-    console.error("MongoDB connection error:", error);
+    console.error('MongoDB connection error:', error.message);
+    process.exit(1); // Exit if we can't connect to database
   });
