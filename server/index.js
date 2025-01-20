@@ -10,6 +10,10 @@ dotenv.config();
 
 const app = express();
 
+// Hardcode the MongoDB URI temporarily for testing
+const MONGODB_URI =
+  "mongodb+srv://root:root@cluster0.91fyb.mongodb.net/test?retryWrites=true&w=majority";
+
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
@@ -18,11 +22,18 @@ app.use("/posts", postRoutes);
 
 const PORT = process.env.PORT || 5000;
 
+// Log the connection attempt
+console.log("Attempting to connect to MongoDB...");
+console.log("Using URI:", MONGODB_URI);
+
 mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() =>
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("Successfully connected to MongoDB");
     app.listen(PORT, () =>
       console.log(`Server Running on Port: http://localhost:${PORT}`)
-    )
-  )
-  .catch((error) => console.log(`${error} did not connect`));
+    );
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error);
+  });
